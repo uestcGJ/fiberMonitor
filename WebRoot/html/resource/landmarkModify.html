@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+    <script src="js/landmarkAlter.js" type="text/javascript"></script>
+    <script src="js/inputLimit.js" type="text/javascript"></script>
+     <style>
+      .landmarksidebar span{
+    		-webkit-user-select:none;
+			user-select:none;
+            padding: 1px;
+			margin-left:15px;
+			width:60px;
+       }
+      .formFolat{
+          margin-bottom:10px;
+          margin-left:10px;
+          ime-mode:disabled 
+       }
+   </style>
+</head>
+<body>
+<div class="contentDiv" id="contentDiv">
+     <div class="landmarksidebar" >
+    <div class="sidebarTitle" id="move" onmousedown="startMove(event,this.parentNode)" onmouseup="stopMove(event)">
+            <span>修改光缆地标</span>
+            <span class="sidebar_close"><img src="images/close.png" alt="close"/></span>
+        </div>
+        <div>
+            <div>
+                <label  for=""> <span>所属光缆</span></label>
+                 <input class="funcCoffinput" id="thisCableName" style="width:170px;" type="text" disabled="disabled" readonly="readonly"/>
+           </div>
+           <div>
+                 <label  for=""><span>地标名称</span></label>
+                  <input class="funcCoffinput" id="LandmarkName" style="width:170px;" type="text"/>
+           </div>
+            <div>
+                <label  for=""> <span>地标类型</span></label>
+	           <select class="funcCoffinput" style="width:170px;" id="type">
+	           	   <option value="人井">人井</option>
+	           	   <option value="接头">接头</option>
+	           	   <option value="杆路">杆路</option>
+	               <option value="附挂">附挂</option>
+	               <option value="标石">标石</option>
+	           	   <option value="其他">其他</option>
+	           </select>
+	       </div>
+	       <div>
+                 <label  for=""><span>距离起点</span></label>
+                 <input class="formFolat" id="distance"  name="float" placeholder="输入形式如 10.21，单位km"/>
+	            <span class="unitFloat" style="margin-left:0px;width:5px;">km</span>
+           </div>
+           <div>
+                 <label  for=""><span>地标经度</span></label>
+                 <input class="formFolat"  id="lngFloat"  name="float" placeholder="输入形式如113.211"/>
+	            <span class="unitFloat" style="margin-left:0px;width:5px;">°</span>
+           </div>
+            <div>
+                <label  for=""><span>地标纬度</span></label>
+                <input class="formFolat" id="latFloat"  name="float" placeholder="输入形式如113.211"/>
+			    <span class="unitFloat" style="margin-left:0px;width:5px;">°</span> 
+           </div>
+           <div>
+                 <label  for=""><span >地标描述</span></label>
+                 <textarea id="landmarkDescription" style="margin-left: 10px;" cols="23" rows="8"></textarea>
+           </div>
+           
+       </div>
+        <div class="funcConfirm">
+            <div class="callTestingFunc">
+                <span class="alterConfirm spanbutton">确定</span>          
+                <span class="alterCancel spanbutton" style="margin-left:50px;">取消</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

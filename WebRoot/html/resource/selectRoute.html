@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../css/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../../css/prettify.css" />
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="../../css/routeMultiList.css" />
+<script src="../../js/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="../../js/json2.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui.js"></script>
+<script type="text/javascript" src="../../js/prettify.js"></script>
+<script type="text/javascript" src="../../js/jquery.multiselect.js"></script>
+<script src="../../js/inputLimit.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../js/selectRoute.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#routeListSelect").multiselect({
+		noneSelectedText: "请选择",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:0, 
+	});
+});
+/***div拖拽***/
+var offset_x;
+var offset_y;
+function toMove(oEvent,divId){
+	
+	var whichButton;
+	if(document.all&&oEvent.button==1)
+		  whichButton=true;
+   else {
+	   if(oEvent.button==0)
+		whichButton=true;
+	}
+	if(whichButton){ 
+	    var oDiv=document.getElementById("routebarContent");
+		var offset_x=parseInt(oEvent.clientX-oDiv.offsetLeft);
+		var offset_y=parseInt(oEvent.clientY-oDiv.offsetTop);
+		var ui_offset=$(".contentArea").next().offset();
+		var ui_offset_x=parseInt(oEvent.clientX-ui_offset.left);
+		var ui_offset_y=parseInt(oEvent.clientY-ui_offset.top);
+		document.documentElement.onmousemove=function(mEvent){ 
+			var eEvent;
+		    if(document.all){
+		          eEvent=event;
+		    }
+		    else{
+		       eEvent=mEvent;
+		    }
+		    var x=eEvent.clientX-offset_x;
+		    var y=eEvent.clientY-offset_y;
+		    var ui_x=eEvent.clientX-ui_offset_x;
+		    var ui_y=eEvent.clientY-ui_offset_y;
+		    oDiv.style.left=(x)+"px";
+		    oDiv.style.top=(y)+"px";
+		  //光路列表区域
+			$(".contentArea").next().css('left',(ui_x)+"px");
+			$(".contentArea").next().css('top',(ui_y)+"px");
+		    
+	   }
+   }
+}
+//停止移动
+function toStop(oEvent){
+	console.log("routebarContent stop");
+	document.documentElement.onmousemove=null;  
+}
+</script>
+<style>
+   .func{
+       position:absolute;
+       bottom:50px; 
+       left:160px;
+       height:30px;
+   }
+  .spanbutton {
+	-webkit-user-select:none;
+	user-select:none;
+	text-align:center;
+	font-size:14px;
+	padding: 2px;
+	background-color: #ddd;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.spanbutton:hover {
+	color: white;
+	background-color: rgb(34, 85, 153);
+}
+</style>
+</head>
+<body>
+  <div class="sidebarContent routebarContent" id="routebarContent">
+		<div class="sidebar" style="height:430px">
+        	<div class="sidebarTitle" style="-webkit-user-select:none;user-select:none;" id="move" onmousedown="toMove(event,this.parentNode)" onmouseup="toStop(event)">
+	            <span>选择光路</span>
+	            <span class="sidebar_close"><img src="../../images/close.png" alt="close"/></span>
+        	</div>
+            <div style="margin-left:30px;margin-top:20px;width:230px;"> 系统根据您设置的路线，计算出以下光路,请选择光路并设定基本信息</div>
+            <div class="routeLi" style="width:230px; height:320px; margin-left:40px; margin-top:10px; position:relative;">
+	              <select title="光路列表" multiple="multiple" id="routeListSelect" size="4" style="position:relative;" >
+				 </select>
+            </div>
+         <div class="func">
+         	<span class="confirm spanbutton">提交</span>   
+         </div>
+    </div>
+    
+</div>
+<div class="sidebarRouteDiv" id="sidebarRouteDiv" style="display: none;"></div>
+</body>
+</html>

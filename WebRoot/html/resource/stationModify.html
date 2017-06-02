@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+    <script src="js/alterStation.js" type="text/javascript"></script>
+    <script src="js/inputLimit.js" type="text/javascript"></script>
+    <style>
+     .lngAndLat{
+             margin-left:10px;
+             margin-bottom:10px;
+             ime-mode:disabled;
+     }
+    </style>
+</head>
+<body>
+<div class="contentDiv" id="contentDiv">
+    <div class="bgDiv"></div>
+    <div class="sidebar" style="height:450px;">
+        <div class="sidebarTitle" id="move" onmousedown="startMove(event,this.parentNode)" onmouseup="stopMove(event)">
+            <span>修改局站</span>
+            <span class="sidebar_close"><img src="images/close.png" alt="close"/></span>
+        </div>
+        
+        <div class="funcName">
+            <p>局站标识</p>
+            <p>局站名称</p>
+            <p>所属区域</p>
+            <p>局站经度</p>
+            <p>局站纬度</p>
+            <p>局站描述</p>
+        </div>
+        <div>
+            <input class="funcCoffinput" type="text" id="stationId" readonly="readonly" disabled="disabled"/>
+            <input class="funcCoffinput" type="text" id="stationName" />
+            <input class="funcCoffinput"  type="text" id="belongAreaName" readonly="readonly" disabled="disabled"/>
+        <div>
+            <input class="lngAndLat"  id="lng" name="float" id="lng"/>
+            <span class="unitFloat"  style="margin-left:0px;width:5px;">°</span>
+        </div>
+        <div>    
+            <input class="lngAndLat" id="lat" name="float" id="lat"/>
+            <span class="unitFloat" style="margin-left:0px;width:5px;">°</span>
+        </div>    
+            <textarea id="description" style="margin-left: 10px;" cols="24" rows="8"></textarea>
+        </div>
+        <div class="funcConfirm">
+            <div class="callTestingFunc">
+                <span class="confirm spanbutton">确定</span>          <!--添加确定对应事件-->
+                <span class="cancel spanbutton" style="margin-left:50px;">取消</span>
+           </div>
+        </div>
+      
+    </div>
+</div>
+</body>
+</html>

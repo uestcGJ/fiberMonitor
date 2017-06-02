@@ -66,7 +66,33 @@ function getMapPoint(){
 	}
 	firstEnter=false;	
 }
-
+/**隐藏或显示光缆信息***/
+function changeCableLibes(){
+	map.clearOverlays();
+	$.ajax({
+		url: '../../getMapPoints',
+		type: 'post', //数据发送方式
+		dataType: 'json', //接受数据格式
+		async: false,
+		success: function (json) {
+			if (json[0].status) {
+				var cablePoint = json[0].points;
+				plotMarker(cablePoint);
+				
+			}
+		},
+		error:function(XMLHttpRequest,Error){
+	  	}
+	});
+	if($("#cable").text()=="隐藏光缆"){
+		$("#cable").text("显示光缆");
+	}
+	else{
+		$("#cable").text("隐藏光缆");
+		getCableLines();
+	}
+	getRouteLandmarkers();//绘制光路信息
+}
 //右下角缩略图控件
 var overView = new BMap.OverviewMapControl();
 var overViewOpen = new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
@@ -327,6 +353,7 @@ $.ajax({
 			var cablePoint = json[0].points;
 			plotMarker(cablePoint);
 			getCableLines();
+			getRouteLandmarkers();//绘制光路信息
 		}
 	},
 	error:function(XMLHttpRequest,Error){
@@ -344,12 +371,10 @@ function getCableLines() {
 			if (json[0].status) {
 				var cableLines = json[0].cables;
 				plotLine(cableLines);
-				getRouteLandmarkers();//绘制光路信息
 			}
 		},
-		error:function(XMLHttpRequest,Error)
-	      {
-	      }
+		error:function(XMLHttpRequest,Error){
+	    }
 	});
 }
 //获取光路坐标和告警信息 
@@ -366,9 +391,8 @@ function getRouteLandmarkers() {
 				plotRoutes(routes);//绘制光路信息
 			}
 		},
-		error:function(XMLHttpRequest,Error)
-	      {
-	      }
+		error:function(XMLHttpRequest,Error){
+	    }
 	});
 }
 /**
@@ -706,7 +730,10 @@ function confirmWarn(selectId){
 										if (json[0].status) {
 											var cablePoint = json[0].points;
 											plotMarker(cablePoint);
-											getCableLines();
+											if($("#cable").text()=="隐藏光缆"){
+												getCableLines();
+											}
+											getRouteLandmarkers();//绘制光路信息
 										}
 									},
 									error:function(XMLHttpRequest,Error){

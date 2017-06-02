@@ -91,7 +91,9 @@
 		.map-mark:hover .mark {
 		    background-position: -40px -168px;
 		}
-		
+		.map-mark:hover .cable {
+		    background-position: -40px -49px;
+		}
 		.boxinfo li .measure {
 			background-position:-80px -117px;
 		 }
@@ -99,6 +101,12 @@
 		.boxinfo li .mark {
 		    background-position: -80px -168px;
 		}
+		.boxinfo li .cable {
+			 background-position: -40px -117px;
+		 }
+ 		 .boxinfo li .cable:hover { 
+ 			 background-position: -40px -49px; 
+ 		 } 
 		.boxinfo li .mark:hover {
 		    background-position: -40px -168px;
 		}
@@ -128,6 +136,10 @@
 				<li class="map-mark" onclick="getMapPoint();">
 					<span class="last mark"> </span>
 					<i id="point">获取坐标</i>
+				</li>
+				<li class="map-mark" onclick="changeCableLibes();">
+					<span class="last cable"> </span>
+					<i id="cable">隐藏光缆</i>
 				</li>
 			</ul>
 	   </div>
@@ -221,12 +233,37 @@ function getMapPoint(){
 		}
 		
 	}else{
-		$("#point").text("获取坐标");
+		 $("#point").text("获取坐标");
 		 $('#tip').css('display','none');
 	}
 	firstEnter=false;	
 }
-
+function changeCableLibes(){
+	map.clearOverlays();
+	$.ajax({
+		url: '../../getMapPoints',
+		type: 'post', //数据发送方式
+		dataType: 'json', //接受数据格式
+		async: false,
+		success: function (json) {
+			if (json[0].status) {
+				var cablePoint = json[0].points;
+				plotMarker(cablePoint);
+				
+			}
+		},
+		error:function(XMLHttpRequest,Error){
+	  	}
+	});
+	if($("#cable").text()=="隐藏光缆"){
+		$("#cable").text("显示光缆");
+	}
+	else{
+		$("#cable").text("隐藏光缆");
+		getCableLines();
+	}
+	getRouteLandmarkers();//绘制光路信息
+}
 //右下角缩略图控件
 var overView = new BMap.OverviewMapControl();
 var overViewOpen = new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
@@ -463,9 +500,7 @@ LandmarkOverlay.prototype.initialize = function(map){
      this.getElementsByTagName("span")[0].innerHTML = that._text;
      arrow.style.backgroundPosition = "0px -22px";
   }
-
   map.getPanes().labelPane.appendChild(div);
-  
   return div;
 }
 LandmarkOverlay.prototype.draw = function(){
@@ -487,6 +522,7 @@ $.ajax({
 			var cablePoint = json[0].points;
 			plotMarker(cablePoint);
 			getCableLines();
+			getRouteLandmarkers();//绘制光路信息
 		}
 	},
 	error:function(XMLHttpRequest,Error){
@@ -504,7 +540,6 @@ function getCableLines() {
 			if (json[0].status) {
 				var cableLines = json[0].cables;
 				plotLine(cableLines);
-				getRouteLandmarkers();//绘制光路信息
 			}
 		},
 		error:function(XMLHttpRequest,Error)
@@ -631,7 +666,6 @@ function plotLine(cableLine) {
 			map.addOverlay(myCompOverlay);			
 		}
 	}
-
 };
 
 /***绘制光路
@@ -811,7 +845,7 @@ function plotRoutes(routes) {
 		points.push(new BMap.Point(offsetPoint[0],offsetPoint[1]));
 		points.push(lastPoint);
 		var color="rgb(0,255,0)";
-		var strokeWeight=4;
+		var strokeWeight=5;
 		var strokeOpacity=0.75;
 		if(warns.length>0){
 			color="red";
@@ -858,7 +892,10 @@ function plotRoutes(routes) {
 										if (json[0].status) {
 											var cablePoint = json[0].points;
 											plotMarker(cablePoint);
-											getCableLines();
+											if($("#cable").text()=="隐藏光缆"){
+												getCableLines();
+											}
+											getRouteLandmarkers();//绘制光路信息
 										}
 									},
 									error:function(XMLHttpRequest,Error){

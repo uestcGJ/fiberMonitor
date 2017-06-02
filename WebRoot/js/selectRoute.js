@@ -126,6 +126,7 @@ function setRoute(para,preId,frameOrder){
 											var cablePoint = json[0].points;
 											plotMarker(cablePoint);
 											getCableLines();
+											getRouteLandmarkers();//绘制光路信息
 										}
 									},
 									error:function(XMLHttpRequest,Error){

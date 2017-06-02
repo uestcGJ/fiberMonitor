@@ -2762,7 +2762,6 @@ public void getFiberByMulti(HttpServletRequest request,HttpServletResponse respo
 	 }
 	 responseData.put("status", status);
 	 responseData.put("routes", routeInfos);
-	 System.out.println(responseData);
 	 response.setContentType("text/xml");
 	 response.setCharacterEncoding("utf-8");
 	 PrintWriter out=response.getWriter();

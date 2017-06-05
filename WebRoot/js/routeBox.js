@@ -93,6 +93,28 @@ function changeCableLibes(){
 	}
 	getRouteLandmarkers();//绘制光路信息
 }
+/**全局变量，是否显示地标***/
+var showLandmark=true;
+/****改变地标的可见性***/
+function changeLandmark(){
+	
+	if($("#landmark").text()=="隐藏地标"){
+		showLandmark=false;
+		$("#landmark").text("显示地标");
+	}
+	else{
+		$("#landmark").text("隐藏地标");
+		showLandmark=true;
+	}
+	//为防止调用光缆显示函数切换光缆状态信息，先将光缆切换键值置反
+	if($("#cable").text()=="隐藏光缆"){
+		$("#cable").text("显示光缆");
+	}
+	else{
+		$("#cable").text("隐藏光缆");
+	}
+	changeCableLibes();//绘制光路信息
+}
 //右下角缩略图控件
 var overView = new BMap.OverviewMapControl();
 var overViewOpen = new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
@@ -457,7 +479,7 @@ function plotLine(cableLine) {
 				var mark=marks[j][markIndex];
 				var position=new BMap.Point(mark.lng,mark.lat);
 				tempPoints.push(position);//加入地标点
-				if(hasRoute[j]==false||hasRoute[j]=="false"){
+				if(showLandmark&&(hasRoute[j]==false||hasRoute[j]=="false")){
 	 				var pointName=mark.name;
 	 				 // 创建标注对象并添加到地图   
 	 				var mouseoverTxt = mark.name + " 地标类型："+mark.type+" 距离起点："+mark.distance+"km" ;
@@ -554,39 +576,41 @@ function plotRoutes(routes) {
 			var mark=marks[j];
 			var position=new BMap.Point(mark.lng,mark.lat);
 			points.push(position);//加入地标点
-			if(mark.type=='站点'){
-				position=new BMap.Point(mark.lng-0.003,mark.lat+0.0003);
+			if(showLandmark){
+				if(mark.type=='站点'){
+					position=new BMap.Point(mark.lng-0.003,mark.lat+0.0003);
+				}
+				var routeMarkBlue = new RouteMarker(position,{icon:routeMarkLabel});  // 创建标注
+				map.addOverlay(routeMarkBlue);               // 将标注添加到地图中
+				var infoMark ="<div style='font-size:13px;line-height:1.5;margin-bottom:10px'>"+
+									"<div style='margin:0;text-indent:0.5em'>"+
+								       "<span style='font-weight:bold;'>  地标名称：</span>" +mark.name +
+								    "<div/>"+
+								    "<div style='margin:0;text-indent:0.5em'>"+
+								    	"<span style='font-weight:bold;'>  地标类型：</span>" +mark.type +
+								    "<div/>"+
+								    "<div style='margin:0;text-indent:0.5em'>"+
+								       "<span style='font-weight:bold;'> 距离起点:</span>"+mark.distance+"km"+
+								    "</div>"+
+					       "</div>";
+			    routeMarkBlue.setInfo(infoMark);
+			    routeMarkBlue.setName(mark.name);
+			    routeMarkBlue.addEventListener("mouseover", function(){
+			    	var routeMarLabel = new BMap.Label(this.getName(), { offset: new BMap.Size(10, -20) });
+			    	routeMarLabel.setStyle({background:"black",color :"white",fontSize : "13px",borderColor:"black",})
+		            this.setLabel(routeMarLabel);//绘制标签
+				});
+			    routeMarkBlue.addEventListener("mouseout", function(){
+			    	map.removeOverlay(this.getLabel());
+				});
+			    routeMarkBlue.addEventListener("click", function(){
+					   var opts={width:160,height:100};
+					   var infoWindow = new BMap.InfoWindow(this.getInfo(),opts);
+					   infoWindow.setTitle("<div style='color:red;margin:0 0 5px 0;padding:0.2em 0'>光路地标</div>")
+					   this.openInfoWindow(infoWindow);
+				});
 			}
-			var routeMarkBlue = new RouteMarker(position,{icon:routeMarkLabel});  // 创建标注
-			map.addOverlay(routeMarkBlue);               // 将标注添加到地图中
-			var infoMark ="<div style='font-size:13px;line-height:1.5;margin-bottom:10px'>"+
-								"<div style='margin:0;text-indent:0.5em'>"+
-							       "<span style='font-weight:bold;'>  地标名称：</span>" +mark.name +
-							    "<div/>"+
-							    "<div style='margin:0;text-indent:0.5em'>"+
-							    	"<span style='font-weight:bold;'>  地标类型：</span>" +mark.type +
-							    "<div/>"+
-							    "<div style='margin:0;text-indent:0.5em'>"+
-							       "<span style='font-weight:bold;'> 距离起点:</span>"+mark.distance+"km"+
-							    "</div>"+
-				       "</div>";
-		    routeMarkBlue.setInfo(infoMark);
-		    routeMarkBlue.setName(mark.name);
-		    routeMarkBlue.addEventListener("mouseover", function(){
-		    	var routeMarLabel = new BMap.Label(this.getName(), { offset: new BMap.Size(10, -20) });
-		    	routeMarLabel.setStyle({background:"black",color :"white",fontSize : "13px",borderColor:"black",})
-	            this.setLabel(routeMarLabel);//绘制标签
-			});
-		    routeMarkBlue.addEventListener("mouseout", function(){
-		    	map.removeOverlay(this.getLabel());
-			});
-		    routeMarkBlue.addEventListener("click", function(){
-				   var opts={width:160,height:100};
-				   var infoWindow = new BMap.InfoWindow(this.getInfo(),opts);
-				   infoWindow.setTitle("<div style='color:red;margin:0 0 5px 0;padding:0.2em 0'>光路地标</div>")
-				   this.openInfoWindow(infoWindow);
-			});
-		}
+		}	
 		var icon = new BMap.Icon('../../images/errorLabel32_1.png', new BMap.Size(32, 32), {
 		    anchor: new BMap.Size(10, 25)
 		});

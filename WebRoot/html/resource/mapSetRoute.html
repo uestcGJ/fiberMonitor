@@ -90,6 +90,15 @@
  		 .map-mark:hover .cable {
 		    background-position: -40px -49px;
 		}
+		.map-mark:hover .landmark {
+		    background-position: 0 -168px;
+		}
+		.boxinfo li .landmark {
+			 background-position: 0 0;
+		 }
+ 		 .boxinfo li .landmark:hover { 
+ 			  background-position: 0 -168px;
+ 		 } 
 		div#tip{
 			  display:none;
 			  z-index:80000;
@@ -162,6 +171,10 @@
 				<li class="map-mark" onclick="changeCableLibes();">
 					<span class="last cable"> </span>
 					<i id="cable">隐藏光缆</i>
+				</li>
+				<li class="map-mark" onclick="changeLandmark();">
+					<span class="last landmark"> </span>
+					<i id="landmark">隐藏地标</i>
 				</li>
 			</ul>
 	</div>

@@ -10,6 +10,7 @@
 	<style>
 		.error {
 			color: red;
+			margin-left:210px;
 		}
 	</style>
 
@@ -97,6 +98,18 @@
 	}
 	/**修改手机号**/
 	$("#submitPhone").click(function(){
+		if(!phoneValidate()){
+			 var txt="您输入信息不完善或存在非法输入，请核对后重新输入。"
+					var option={
+		   					title: "提示",
+		   					btn: parseInt("0001",2),
+		   					onOk: function(){//点击确认的执行方法
+		   						
+		  			       }
+		   				}
+		   		  window.wxc.xcConfirm(txt, "info", option);
+			return;
+		}
 		if(!$.idcode.validateCode()){
 			 var txt="验证码错误，请输入正确的验证码。";
 				var option={
@@ -147,8 +160,7 @@
 		    	   		  window.wxc.xcConfirm(txt, "info", option);
 				 }
 			},
-			error:function(XMLHttpRequest,Error)
-		      {
+			error:function(XMLHttpRequest,Error){
 		    	   
 		    	    var txt="修改失败,";
 		    	    txt+="失败原因：";
@@ -172,6 +184,18 @@
 	})
 	/**修改邮箱**/
 	$("#submitEmail").click(function(){
+	  if(!emailValidate()){
+		    var txt="您输入信息不完善或存在非法输入，请核对后重新输入。"
+			var option={
+   					title: "提示",
+   					btn: parseInt("0001",2),
+   					onOk: function(){//点击确认的执行方法
+   						
+  			       }
+   				}
+   		  window.wxc.xcConfirm(txt, "info", option);
+		return;
+	  }
 	  $.ajax({
 			type:'post', //数据发送方式
 	        dataType:'json', //接受数据格式
@@ -213,13 +237,13 @@
 			error:function(XMLHttpRequest,Error)
 		      {
 		    	   
-		    	    var txt="修改失败<br/>";
+		    	    var txt="修改失败,";
 		    	    txt+="失败原因：";
 		    	    if(XMLHttpRequest.status==401){
 		    	        txt+="您不具有当前操作的权限，请联系管理员取得权限<br/>";
 		    	     }
 		    	     else{
-		    	        	txt+="网络错误<br/>";
+		    	        	txt+="网络错误,";
 		    	        	txt+="状态码："+XMLHttpRequest.status;
 		    	        }
 		    	      var option={
@@ -278,73 +302,76 @@
 				return false;
 			}
 		});
-
-		$("#editemail").validate({
+      
+});
+  function emailValidate(){
+   	  return $("#editemail").validate({
+  			rules: {
+  				newemail: {
+  					required: true,
+  					email: true
+  				},
+  				checkemail: {
+  					required: true,
+  					email: true,
+  					equalTo: "#newemail"
+  				},
+  				epassword: {
+  					required: true
+  				}
+  			},
+  			messages: {
+  				newemail: {
+  					required: "请输入新的电子邮箱地址",
+  					email: "请输入有效的电子邮箱地址"
+  				},
+  				checkemail: {
+  					required: "请再次输入邮箱地址",
+  					email: "请输入有效的电子邮箱地址",
+  					equalTo: "两次邮箱地址不一致"
+  				},
+  				epassword: {
+  					required: "请输入账户密码"
+  				}
+  			}
+  		}).form();
+      }
+  function phoneValidate(){
+	  return $("#editphone").validate({
 			rules: {
-				newemail: {
+				newphone: {
 					required: true,
-					email: true
+					digits: true,
+					rangelength: [11,11]
 				},
-				checkemail: {
+				checkphone: {
 					required: true,
-					email: true,
-					equalTo: "#newemail"
+					digits: true,
+					rangelength: [11,11],
+					equalTo: "#newphone"
 				},
-				epassword: {
+				ppassword: {
 					required: true
-				}
+				},
 			},
 			messages: {
-				newemail: {
-					required: "请输入新的电子邮箱地址",
-					email: "请输入有效的电子邮箱地址"
+				newphone: {
+					required: "请输入新的手机号码",
+					digits: "请输入有效的手机号码",
+					rangelength: "请输入有效的手机号码"
 				},
-				checkemail: {
-					required: "请再次输入邮箱地址",
-					email: "请输入有效的电子邮箱地址",
-					equalTo: "两次邮箱地址不一致"
+				checkphone: {
+					required: "请再次输入新的手机号",
+					digits: "请输入有效的手机号",
+					rangelength: "请输入有效的手机号",
+					equalTo: "两次输入不一致"
 				},
-				epassword: {
+				ppassword: {
 					required: "请输入账户密码"
-				}
+				},
 			}
-		});
-
-	$("#editphone").validate({
-		rules: {
-			newphone: {
-				required: true,
-				digits: true,
-				rangelength: [11,11]
-			},
-			checkphone: {
-				required: true,
-				digits: true,
-				rangelength: [11,11],
-				equalTo: "#newphone"
-			},
-			ppassword: {
-				required: true
-			},
-		},
-		messages: {
-			newphone: {
-				required: "请输入新的手机号码",
-				digits: "请输入有效的手机号码",
-				rangelength: "请输入有效的手机号码"
-			},
-			checkphone: {
-				required: "请再次输入新的手机号",
-				digits: "请输入有效的手机号",
-				rangelength: "请输入有效的手机号",
-				equalTo: "两次输入不一致"
-			},
-			ppassword: {
-				required: "请输入账户密码"
-			},
-		}
-	});
-});
+		}).form();
+  }
 	</script>
 </body>
 

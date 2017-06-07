@@ -10,14 +10,14 @@ $(document).ready(function(){
 		$("#loadPasswordDiv").load("login/html/getPassword.html"); 
 		$("#loadPassword").css({"display":"block"});
 	});	
-	//登录
-	$("#submitLogin").click(function(){
-		if(validateForm()){
-			doLogin();
-		}
-	})
+	
 });
-
+//登录
+function loginCheck(){
+	if(validateForm()){
+		doLogin();
+	}
+}
 function doLogin(){
 	$.ajax({
 		cache: false,

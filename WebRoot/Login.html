@@ -22,6 +22,7 @@
 		</div>
 		<div class="login">
 			<h2 class="label">用户登录</h2>
+			<form action="javascript:loginCheck()" method="post">
 				<div>
 					<span class="label">用户名：</span>
 					<input type="text" id="user" name="userName" onpaste="return false" autocomplete="off">
@@ -38,12 +39,13 @@
 					<!--验证码显示区域-->
 				</div>
 				<div>
-					<span><input id="submitLogin" type="button"  value="登录"></span>
+					<span><input id="submitLogin" type="submit"  value="登录"></span>
 					<input type="button" id="getPassword" value="忘记密码" />
 				</div>
 				<div class="loginlist" style="margin:5px 20px 6px 70px;">
 					<font class="msg" color="red"> </font>
 				</div>
+			</form>	
 		</div>
 	</div>
 </body>

@@ -1149,27 +1149,47 @@ public void getPortByFrameId(HttpServletRequest request,HttpServletResponse resp
 		 	 	    				frameRec=fiberCore.getFrame_z_id();
 	 	 	    				}
 	 	 	    				Frame_ports portRec=findService.findFramePortByFrameIdAndPortOrder(frameRec,order);
-	 	 	    				if(portRec.getConnection_id()!=null&&portRec.getConnection_type().equals("光路跳纤")){//连接有光路跳纤
-	 	 	    					Jumper_routes jumperRoute=findService.findJumperRoute(portRec.getConnection_id());
-	 	 	    					int moudleOrder=jumperRoute.getModelOrder();
-	 	 	    					String moudleInfo=findService.findRtu(jumperRoute.getRtu_id()).getInstallInfo();
-	 	 	    					String moudleType=moudleInfo.substring(moudleOrder-1,moudleOrder);
-	 	 	    					/**光路所在的模块类型：
-	 	 	    					 * 1为在线 
-	 	 	    					 * 2为备纤 
-	 	 	    					 * 3为保护-主 
-	 	 	    					 * 4为在线OPM
-	 	 	    					 * 5为保护-从
-	 	 	    					 * 只有连有保护-主模块端口的配线架端口可以连接切换跳纤*/
-	 	 	    					if((moudleType.equals("3")&&portType.equals("jumperSwitch"))||(portType.equals("jumperBackup")&&moudleType.equals("2"))){
-				    				    keep=true;
-				    				  }
-	 	 	    				}
-	 	 	    		} 
+	 	 	    				if(portRec.getConnection_id()!=null){
+	 	 	    					long currentFramePortId=portRec.getId();//记录当前配线架端口的标识
+	 	 	    				    /***可能存在跨站的情况，逐级向上查询，直到找到光路端口****/
+	 	 	    					while(portRec.getConnection_id()!=null&&portRec.getConnection_type().equals("配线架跳纤")){
+	 	 	    						Jumper_frames jumper_frames=findService.findJumperFrame(portRec.getConnection_id());
+	 	 	    						Frame_ports frame_port=findService.findFramePortByFrameIdAndPortOrder(jumper_frames.getFrame_a_id(), jumper_frames.getPort_order_a());
+	 	 	    						if(frame_port.getId()==currentFramePortId){//确保为上一级配线架的端口
+	 	 	    							frame_port=findService.findFramePortByFrameIdAndPortOrder(jumper_frames.getFrame_z_id(), jumper_frames.getPort_order_z());	 
+	 	 	    						}
+	 	 	    						currentFramePortId=frame_port.getId();//更新当前递归遍历配线架端口的标识
+	 	 	    						fiberCore=findService.findFiberCoreByFrameIDandPortOrder(frame_port.getFrame().getId(),frame_port.getPort_order());
+	 	 	    					   //找到连接纤芯的上一级的配线架端口序号
+	 		 	 	    			    order=fiberCore.getPort_order_a();
+	 		 	 	    			    frameRec=fiberCore.getFrame_a_id();
+	 		 	 	    				if(frame_port.getFrame().getId()==frameRec){//确保为上一级的配线架端口
+	 		 	 	    					order=fiberCore.getPort_order_z();
+	 			 	 	    				frameRec=fiberCore.getFrame_z_id();
+	 		 	 	    				}
+	 		 	 	    				portRec=findService.findFramePortByFrameIdAndPortOrder(frameRec,order);//上一级的配线架端口，继续向上寻找
+	 	 	    					}
+	 	 	    					if(portRec.getConnection_type().equals("光路跳纤")){//连接有光路跳纤
+		 	 	    					Jumper_routes jumperRoute=findService.findJumperRoute(portRec.getConnection_id());
+		 	 	    					int moudleOrder=jumperRoute.getModelOrder();
+		 	 	    					String moudleInfo=findService.findRtu(jumperRoute.getRtu_id()).getInstallInfo();
+		 	 	    					String moudleType=moudleInfo.substring(moudleOrder-1,moudleOrder);
+		 	 	    					/**光路所在的模块类型：
+		 	 	    					 * 1为在线 
+		 	 	    					 * 2为备纤 
+		 	 	    					 * 3为保护-主 
+		 	 	    					 * 4为在线OPM
+		 	 	    					 * 5为保护-从
+		 	 	    					 * 只有连有保护-主模块端口的配线架端口可以连接切换跳纤*/
+		 	 	    					if((moudleType.equals("3")&&portType.equals("jumperSwitch"))||(portType.equals("jumperBackup")&&moudleType.equals("2"))){
+					    				    keep=true;
+					    				}
+		 	 	    				}
+	 	 	    				}		
+	 	 	    		 } 
 	 		    	}
 	    			if(!keep){
-	    				framePort.remove(rCount);
-			    		rCount-=1;
+	    				framePort.remove(rCount--);
 	    			} 
 	    		 }
 	    	}
@@ -3003,7 +3023,6 @@ public void getFiberByMulti(HttpServletRequest request,HttpServletResponse respo
 		   for(int i=0;i<cols;i++){
 			   String colname = sheet.getCell(i, 0).getContents().trim();
 			   if(colname.contains("类型")){
-				   System.out.println("contains type");
 				   colMap.put("type", i);
 				}
 			   else if(colname.contains("名称")){
@@ -3035,7 +3054,6 @@ public void getFiberByMulti(HttpServletRequest request,HttpServletResponse respo
 				   String type="";
 				   if(colMap.get("type")!=null){
 					  type=sheet.getCell((int)colMap.get("type"), index).getContents();
-					  System.out.println("type:"+type);
 				   }
 				  //地标位置
 				   Float distance=null;

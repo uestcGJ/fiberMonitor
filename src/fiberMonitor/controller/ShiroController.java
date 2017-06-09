@@ -224,7 +224,6 @@ public class ShiroController {
 	   boolean status=false;
 	   String err="";
 	   User user=findService.findUserByAccount(account);
-	   System.out.println(request.getParameter("oldPword"));
 	   if(user!=null){
 		   String oldPword=request.getParameter("oldPword");
 		   String pword=request.getParameter("newPword");

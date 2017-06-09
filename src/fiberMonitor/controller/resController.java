@@ -326,7 +326,6 @@ private final String[] weeks={
 	   response.setContentType("text/xml");
 	   response.setCharacterEncoding("utf-8");
 	   PrintWriter out = response.getWriter();
-	   System.out.println("installInfo:"+rtusJson);
 	   out.print(rtusJson.toString());			
 	   out.flush();
 	   out.close();
@@ -1893,7 +1892,6 @@ public  void ResourceDeleteCabinetConditionB (HttpServletRequest request,HttpSer
     	timeAndData[0].put("timeList", timeList);
     	timeAndData[0].put("dataList", dataList);
     	JSONArray responseJson=JSONArray.fromObject(timeAndData); 
-    	System.out.println(responseJson);
 		PrintWriter out=response.getWriter();
 		out.println(responseJson);
 		out.flush(); 
@@ -2054,7 +2052,6 @@ public  void ResourceDeleteCabinetConditionB (HttpServletRequest request,HttpSer
 		}
 		responseData.put("status", status);
 		JSONArray responseJson=JSONArray.fromObject(responseData);//生成json格式
-		System.out.println(responseJson.get(0));
 		PrintWriter out=response.getWriter();
 		out.println(responseJson.get(0));
 		out.flush();
@@ -2085,7 +2082,6 @@ public  void ResourceDeleteCabinetConditionB (HttpServletRequest request,HttpSer
 		}
 		responseData.put("status", status);
 		JSONArray jsonArray=JSONArray.fromObject(responseData);
-		System.out.println(jsonArray.get(0));
 		PrintWriter out=response.getWriter();
 		out.println(jsonArray.get(0));
 		out.flush();
@@ -2144,7 +2140,6 @@ public  void ResourceDeleteCabinetConditionB (HttpServletRequest request,HttpSer
 		}
 		responseData.put("status", status);
 		JSONArray responseJson=JSONArray.fromObject(responseData);//生成json格式
-		System.out.println(responseJson);
 		PrintWriter out=response.getWriter();
 		out.println(responseJson.get(0));
 		out.flush();

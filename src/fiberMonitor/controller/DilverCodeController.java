@@ -426,7 +426,6 @@ public class DilverCodeController {
 		    		 Rtus rtu=findService.findRtu((long)portPara.get("CM"));
 			    	  portPara.put("CLP",rtu.getStation().getId());
 	   		   	      String xml=XmlCodeCreater.cancelPortOccupy(portPara);
-	   		   	      ////System.out.println("下发指令:\n"+xml);
 		   			  String rtuUrl="http://"+rtu.getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 		   			  String fileName=NumConv.createVerifyCode(20);
 					  String  responseFile="cancelPortOccupyResponse"+fileName+".xml";
@@ -463,7 +462,6 @@ public class DilverCodeController {
    		  responseData.put("status", status);
    		  responseData.put("rtuId", rtuId);
    		  JSONArray responseJson=JSONArray.fromObject(responseData);
-   		  ////System.out.println("JsonData:"+responseJson);
    		  PrintWriter out;
 		  out=response.getWriter();
 		  out.print(responseJson);
@@ -501,7 +499,6 @@ public class DilverCodeController {
 	   	      Rtus rtu=findService.findRtu(route.getRtu_id());
 	   		  para.put("CLP",rtu.getStation().getId());
 	   	      String xml=XmlCodeCreater.setPortOccupy(para);
-	   	      ////System.out.println("下发指令:\n"+xml);
 			  String rtuUrl="http://"+rtu.getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 			  String fileName=NumConv.createVerifyCode(20);
 			  String responseFile="modifyRtuPortResponse"+fileName+".xml";
@@ -605,7 +602,6 @@ public class DilverCodeController {
 			   		 ports.add(order);
 			   		 para.put("ports", ports);
 			   		 String xml=XmlCodeCreater.cancelPortOccupy(para);
-			   		 //System.out.println("send:"+xml);
 			   		 String rtuUrl="http://"+rtu.getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 			   		 String fileName=NumConv.createVerifyCode(20);
 					 String responseFile="delRtuPortResponse"+fileName+".xml";
@@ -699,7 +695,6 @@ public class DilverCodeController {
 		    * 等待延时设为20秒
 		    * */
     	String setNamedCode=XmlCodeCreater.setNameTestCode(testPara);
-    	////System.out.println("点名测试XML："+setNamedCode);
     	String rtuUrl="http://"+findService.findRtu(rtuId).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 		Map<String,Object> responseData=new LinkedHashMap<String, Object>();
     	boolean status=false;
@@ -928,7 +923,6 @@ public class DilverCodeController {
 			 timeTable[0][mainCount] =para;
 	     }
 		String cycParaXML=XmlCodeCreater.setCycParaCode(indexPara,timeTable);//生成xml格式优化参数命令
-		//////System.out.println("周期测试参数表:"+cycParaXML);
 		Long CM=Long.parseLong(request.getParameter("CM"));
 		String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 		Map<String, Object> responseData=new LinkedHashMap<String, Object>();
@@ -1029,7 +1023,6 @@ public class DilverCodeController {
 	            }
 			}  
         String cycParaXML=XmlCodeCreater.setCycParaCode(indexPara,timeTable);//生成xml格式优化参数命令
-		////System.out.println("周期测试参数表:"+cycParaXML);
     	Map<String, Object> responseData=new LinkedHashMap<String, Object>();
     	boolean status=false;
     	String err="";
@@ -1184,7 +1177,6 @@ public class DilverCodeController {
  		PrintWriter out=response.getWriter();
      	JSONArray responseD =JSONArray.fromObject(responseData);//将回传数据封装为JSON格式
      	/*将数据返回到前端*/
-     	//////System.out.println("回复码："+responseData.get("StatusCode"));
      	out.print(responseD);// 
      	out.flush();
      	out.close();
@@ -1232,7 +1224,6 @@ public class DilverCodeController {
 		groupList.add(groupMap);
 		alarmPara.put("groupList", groupList);
 		String  setAlarmTestCode=XmlCodeCreater.setAlarmTestCode(alarmPara);//生成xml格式优化参数命令
-		////System.out.println("XML文件为：\n"+setAlarmTestCode);
 		String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 		boolean status=false;
 		Map<String, Object> responseData=new LinkedHashMap<String,Object>();
@@ -1320,7 +1311,6 @@ public class DilverCodeController {
 		cancelPara.put("CLP", CLP);
 		cancelPara.put("SNos", SNos);
 	    String  cancelObstacle=XmlCodeCreater.cancelObstacle(cancelPara);//生成xml格式优化参数命令
-		//////System.out.println("XML文件为：\n"+cancelObstacle);
 	    String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 	    String fileName=NumConv.createVerifyCode(20);
 	    String responseFile="cancelObstacleResponse"+fileName+".xml";
@@ -1386,7 +1376,6 @@ public class DilverCodeController {
 		alarmPara.put("CLP", CLP);
 		alarmPara.put("AI",alarmId);
 	    String  setAlarmCode=XmlCodeCreater.setAlarmAlertWay(alarmPara);//生成xml格式优化参数命令
-		//////System.out.println("XML文件为：\n"+setAlarmCode);
 	    String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 	    String fileName=NumConv.createVerifyCode(20);
 	    String responseFile="setAlarmWayResponse"+fileName+".xml";
@@ -1434,7 +1423,6 @@ public class DilverCodeController {
 		alarmPara.put("CM", CM);
 		alarmPara.put("CLP", CLP);
 		String  cancelAlarmCode=XmlCodeCreater.cancelAlarmAlert(alarmPara);//生成xml格式优化参数命令
-		//////System.out.println("XML文件为：\n"+cancelAlarmCode);
 		String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 		String fileName=NumConv.createVerifyCode(20);
 		String responseFile="cancelAlarmResponse"+fileName+".xml";
@@ -1728,7 +1716,6 @@ public class DilverCodeController {
 		Map<String, Object> alarmPara =new LinkedHashMap<String, Object>();
 		JSONArray thresholdArray=JSONArray.fromObject(request.getParameter("threshold"));
 		JSONArray testParaArray=JSONArray.fromObject(request.getParameter("testPara"));
-		////System.out.println("thresholdArray size:"+thresholdArray.size());
 		String err="";
 		Map<String,Object> responseData=new LinkedHashMap<String, Object>();
 		boolean status=false;
@@ -1778,7 +1765,6 @@ public class DilverCodeController {
 			alarmPara.put("CLP", rtu.getStation().getId());
 			alarmPara.put("AN", 1);
 			String  setAlarmTestCode=XmlCodeCreater.setAlarmTestCode(alarmPara);//生成xml格式优化参数命令
-			////System.out.println("XML文件为：\n"+setAlarmTestCode);
 			String rtuUrl="http://"+rtu.getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 			status=false;
 			try {
@@ -1836,7 +1822,6 @@ public class DilverCodeController {
 					protectGroupsPara.put("PN",1);
 					protectGroupsPara.put("groupList",protectList);
 					String setProtectCode=XmlCodeCreater.setProtectGroup(protectGroupsPara);
-					////System.out.println("==========setProtectCode========："+setProtectCode);
 					rtuUrl="http://"+findService.findRtu(rtu.getId()).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 					try {
 						fileName=NumConv.createVerifyCode(20);
@@ -2036,7 +2021,6 @@ public class DilverCodeController {
 				CancelPara.put("CLP", findService.findRtu(rtuId).getStation().getId());
 				CancelPara.put("QNs", QNs);
 				String cancelCode=XmlCodeCreater.cancelProtectGroup(CancelPara);
-				////System.out.println("-------------XmlCodeCreater--------:\n"+cancelCode);
 				String rtuUrl="http://"+findService.findRtu(rtuId).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 				String fileName=NumConv.createVerifyCode(20);
 				String responseFile="cancelGroupResponse"+fileName+".xml";
@@ -2159,7 +2143,6 @@ public class DilverCodeController {
 			response.setCharacterEncoding("utf-8");
 			responseData.put("status", status);
 	    	JSONArray responseD =JSONArray.fromObject(responseData);//将回传数据封装为JSON格式
-	    	System.out.println("response:"+responseD);
 	    	PrintWriter out=response.getWriter();
 	    	/*将数据返回到前端*/
 	    	out.print(responseD);// 
@@ -2171,13 +2154,11 @@ public class DilverCodeController {
 	@RequestMapping("masterCon/getRtuTime")
 	public void getRtuTime(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		    Long CM=Long.parseLong(request.getParameter("rtuId"));
-		    ////System.out.println("CM:"+CM);
 			Long CLP=findService.findRtu(CM).getStation().getId();
 			Map<String,Object> paraMap=new LinkedHashMap<String,Object>();
 			paraMap.put("CLP",CLP);
 			paraMap.put("CM",CM);
 			String xmlCode=XmlCodeCreater.getRtuTime(paraMap);
-			////System.out.println("XML:\n"+xmlCode);
 			Map<String,Object> responseData=new LinkedHashMap<String, Object>();
 			boolean status=false;
 			String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
@@ -2220,16 +2201,13 @@ public class DilverCodeController {
 	@RequestMapping("masterCon/setRtuTime")
 	public void setRtuTime(HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException{
 		    Long CM=Long.parseLong(request.getParameter("rtuId"));
-		    ////System.out.println("CM:"+CM);
 			Long CLP=findService.findRtu(CM).getStation().getId();
 			Map<String,Object> paraMap=new LinkedHashMap<String,Object>();
 			String T8=NumConv.dateToUnixStamp(request.getParameter("time"));
 			paraMap.put("CLP",CLP);
 			paraMap.put("CM",CM);
 			paraMap.put("T8",T8);
-			////System.out.println("time:"+request.getParameter("time")+"\t stamp:"+NumConv.stampToDate(T8));
 			String xmlCode=XmlCodeCreater.adjustRtuTime(paraMap);
-			////System.out.println("XML:\n"+xmlCode);
 			Map<String, Object> responseData=new LinkedHashMap<String, Object>();
 			boolean status=false;
 			Rtus rtu=findService.findRtu(CM);
@@ -2363,7 +2341,6 @@ public class DilverCodeController {
 			response.setContentType("text/xml");
 			response.setCharacterEncoding("utf-8");
 	    	JSONArray responseD =JSONArray.fromObject(responseData);//将回传数据封装为JSON格式
-	    	////System.out.println("response:"+responseD);
 	    	PrintWriter out=response.getWriter();
 	    	/*将数据返回到前端*/
 	    	out.print(responseD);// 
@@ -2392,7 +2369,6 @@ public class DilverCodeController {
 				paraMap.put("Gateway",gateWay);
 				paraMap.put("subnetMask",submask);
 				String xmlCode=XmlCodeCreater.setRtuNetwork(paraMap);
-				////System.out.println("XML:\n"+xmlCode);
 				responseData=new LinkedHashMap<String, Object>();
 				String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 				String fileName=NumConv.createVerifyCode(20);
@@ -2406,7 +2382,6 @@ public class DilverCodeController {
 						  /**进行IP获取测试，如果测试通过表明修改完成，修改数据库中的IP地址**/
 						  rtuUrl="http://"+IP+":5000/cgi-bin/BoaCom.cgi";
 						  xmlCode=XmlCodeCreater.getRtuNetwork(paraMap);
-						  ////System.out.println("code:"+xmlCode);
 						  try{
 							  fileName=NumConv.createVerifyCode(20);
 							  responseFile="getRtuNetwork"+fileName+".xml";
@@ -2434,7 +2409,6 @@ public class DilverCodeController {
 						  fileName=NumConv.createVerifyCode(20);
 						  responseFile="getRtuNetwork"+fileName+".xml";
 						  xmlCode=XmlCodeCreater.getRtuNetwork(paraMap);
-						  ////System.out.println("code:"+xmlCode);
 						  try{
 							  HttpClientUtil.Post(rtuUrl,xmlCode,responseFile,3500,3000);
 							  responseData=XmlDom.AnalyseRespondse(responseFile,testDecode);//调用文件解析函数，获取回传数据
@@ -2472,10 +2446,8 @@ public class DilverCodeController {
 							if(status){
 								 rec=client.recData();//接收数据
 								 client.closeConn();//发送后释放连接
-					    		 ////System.out.println("server response："+NumConv.byteArrayToHex(rec));
 					    		 Map<String,Object>recData=TCPComndUtil.anlyzeRecData(rec);
 					    		 status=(boolean) recData.get("status");
-					    		 ////System.out.println("======="+status);
 					    		 /***==================此处采用新的IP地址进行连接测试===================***/
 					    		 if(status){//指令下发成功
 					    			 /***重启RTU，重启后RTU刷新IP**/
@@ -2578,7 +2550,6 @@ public class DilverCodeController {
 					String time="000005";
 					paraMap.put("Time",time);
 					String xmlCode=XmlCodeCreater.restartRtu(paraMap);
-					////System.out.println("XML:\n"+xmlCode);
 					String rtuUrl="http://"+findService.findRtu(CM).getRtu_url()+":5000/cgi-bin/BoaCom.cgi";
 					String fileName=NumConv.createVerifyCode(20);
 					String responseFile="restartRtu"+fileName+".xml";
@@ -2651,7 +2622,6 @@ public class DilverCodeController {
 			response.setContentType("text/xml");
 			response.setCharacterEncoding("utf-8");
 	    	JSONArray responseD =JSONArray.fromObject(responseData);//将回传数据封装为JSON格式
-	    	////System.out.println("response:"+responseD);
 	    	PrintWriter out=response.getWriter();
 	    	/*将数据返回到前端*/
 	    	out.print(responseD);// 

@@ -221,7 +221,6 @@ public class XmlDom {
 		 			Long CM=Long.parseLong(OpticaPowerData.elementText("CM"));//获取CM
 		 		    int SNo=Integer.parseInt(OpticaPowerData.elementText("SNo"));//获取SNo
 		 		    String powerValue=OpticaPowerData.elementText("PowerValue");//获取光功率值
-		 		   // System.out.println("CM:"+CM+"\nSNO:"+SNo+"\nfindServiceImpl:"+findService);
 		 		    WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();    
 		 			SessionFactory sessionFactory=(SessionFactory)wac.getBean("sessionFactory");
 		 			Session session=sessionFactory.openSession();
@@ -231,9 +230,8 @@ public class XmlDom {
                     	String time=(String) session.createSQLQuery(sql).uniqueResult();
                     	SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     	long lastTime=sf.parse(time).getTime();
-                    	System.out.println(System.currentTimeMillis()-lastTime);
                     	//排除实时光功率查阅的值
-                    	if((System.currentTimeMillis()-lastTime)<432000){
+                    	if(Float.parseFloat(powerValue)<-68||(System.currentTimeMillis()-lastTime)<432000){
                     		isStored=false;
                     	}
                     }catch(Exception e){
@@ -255,19 +253,15 @@ public class XmlDom {
 		 		break;
 		 	case "ReferenceTime":       //时间参数
 		 		   Element ReferenceTime=root.element("Data").element("ReferenceTime");
-		 		   if(ReferenceTime.elementText("CMDcode").equals("514"))//核对指令码
-		 			   {
-		 			     String T8=ReferenceTime.elementText("T8")+"000";//获取时间，时间信息为时间戳 RTU时间戳格式为10位 Java为13位
-		 			     //System.out.println("stamp:"+T8);
-		 			     T8=NumConv.stampToDate(T8);//将时间戳转换为时间
-		 			    //System.out.println("time:"+T8);
-		 			     responseData.put("T8",T8);
-		 			   }
+		 		   if(ReferenceTime.elementText("CMDcode").equals("514")){//核对指令码
+		 			   String T8=ReferenceTime.elementText("T8")+"000";//获取时间，时间信息为时间戳 RTU时间戳格式为10位 Java为13位
+		 			   T8=NumConv.stampToDate(T8);//将时间戳转换为时间
+		 			   responseData.put("T8",T8);
+		 			}
 		 		  break;
 		 	case "NetworkSegment"://网络参数
 		 		  Element NetworkSegment=root.element("Data").element("NetworkSegment");
-		 		  if(NetworkSegment.elementText("CMDcode").equals("513"))//核对指令码
-		 			   {
+		 		  if(NetworkSegment.elementText("CMDcode").equals("513")){//核对指令码
 		 			     String IP=NetworkSegment.elementText("IP");//获取IP
 		 			     String Netmask=NetworkSegment.elementText("Netmask");//获取netMask
 		 			     String Gateway=NetworkSegment.elementText("Gateway");//获取Gateway

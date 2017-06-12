@@ -40,6 +40,8 @@ $(document).ready(function () {
 	if(fiberPara[15] != ""){
 		$("#frameZPort").attr("disabled",true);
 	}
+	//检查是否挂载光路，确定能否修改连接状态
+	checkIsFiberHasRoute(fiberPara[0]);
 	if (fiberPara[9] != "") {
 		$("#frameA option[value='index']").remove(); 
 		$("#frameA").val(fiberPara[9]);//
@@ -75,7 +77,28 @@ $(document).ready(function () {
 		}
 	}
 });
-
+ function checkIsFiberHasRoute(id){
+	 $.ajax({
+			url: 'fiber/checkIsFiberHasRoute',
+			type: 'post', //数据发送方式
+			dataType: 'json', //接受数据格式
+			async: false,
+			data: {
+				"fiberId": id,
+			    	 },
+			success: function (json) {
+				if (!json.status) {
+					$("#frameZ").attr("disabled",false);
+					$("#frameA").attr("disabled",false);
+					$("#frameAPort").attr("disabled",false);
+					$("#frameZPort").attr("disabled",false);
+				}
+			},
+			error: function () {
+				
+			},
+		});
+ }
 /**----------------获取配线架-------------------*/
 function getFrame(stationId,flag) {
 	var frameId = [];

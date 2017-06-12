@@ -206,8 +206,7 @@ public class SerialPortUtil implements SerialPortEventListener {
 		 byte[] temp = new byte[numBytes];  
          System.arraycopy(readBuffer, 0, temp, 0, numBytes);  
          String reMsg=new String(temp);
-		 if(reMsg.contains("OK")||reMsg.contains("ok"))//看回复是否包含OK
-			{  
+		 if(reMsg.contains("OK")||reMsg.contains("ok")){//看回复是否包含OK  
 			    count++;
 			    if(count==1){
 			    	 portName=eventSource;
@@ -220,11 +219,10 @@ public class SerialPortUtil implements SerialPortEventListener {
 			    	count=0;
 			    }
 				
-			}
-		 else if(reMsg.contains("ERROR")||reMsg.contains("error"))	 
-    	   {
+		}
+		else if(reMsg.contains("ERROR")||reMsg.contains("error")){
 			 portName=eventSource;
-		   }
+		}
 		
 	}  
 
@@ -253,17 +251,11 @@ public class SerialPortUtil implements SerialPortEventListener {
 			return false;
 		}
 	}
-public static void main(String args[]) throws InterruptedException{
-	SerialPortUtil serial=new SerialPortUtil(9600);
-	
-	//System.out.println("start time:"+System.currentTimeMillis());
-	String portName=serial.GetGsmPort();
-	//System.out.println("end time:"+System.currentTimeMillis());
-	//System.out.println("try to open:"+System.currentTimeMillis());
-	MessageHandler smsHandler = new MessageHandler(portName,9600);
-	//System.out.println("open time:"+System.currentTimeMillis());
-	smsHandler.sendSMS("18428067311", "短信发送测试");  
-	//System.out.println("send finished time:"+System.currentTimeMillis());
-}	
+	public static void main(String args[]) throws InterruptedException{
+		SerialPortUtil serial=new SerialPortUtil(9600);
+		String portName=serial.GetGsmPort();
+		MessageHandler smsHandler = new MessageHandler(portName,9600);
+		smsHandler.sendSMS("18428067311", "短信发送测试");  
+	}	
 }
 

@@ -97,14 +97,9 @@ public class AnalysisData {
 		/**数据点个数*/
 		int dataPointSize=getIntData(dataSource,pos,4);
 		float[] dataPoint=new float[dataPointSize];//新建float数组，用于存放每个数据点的数据
-		//File fp=new File("DataPoint.txt");
-		//PrintWriter pfp= new PrintWriter(fp);
 		for(int size=0;size<dataPointSize;size++){
 			dataPoint[size]=(float) (getIntData(dataSource,pos+4+size*2,2)/1000.0-5.0);//还原数据
-           // pfp.print( dataPoint[size]);//存放数据到本地
-			//pfp.print("\r\n");
 		}
-		//pfp.close();
 		DataPointReturn dataPointRe=new DataPointReturn();
 		/**每个数据点占用四个字节
 		 * 加上数据点长度的2个字节*/

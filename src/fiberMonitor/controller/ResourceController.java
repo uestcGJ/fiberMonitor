@@ -2391,10 +2391,30 @@ public void getFiberByMulti(HttpServletRequest request,HttpServletResponse respo
 		out.close();
   	
   }
+/****
+ * 查询纤芯是否挂载光路
+ * **/
+@RequestMapping("fiber/checkIsFiberHasRoute")
+public void checkIsFiberHasRoute(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		boolean status=false;
+		JSONObject responseData=new JSONObject();
+		Long id=Long.parseLong(request.getParameter("fiberId"));
+		Fiber_cores fiber=findService.findFiberCore(id);
+		if(fiber!=null){
+			if(fiber.getRoute_id()!=null){
+				status=true;
+			}
+		}
+		responseData.put("status", status);
+		PrintWriter out=response.getWriter();
+		out.println(responseData);
+		out.flush();
+		out.close();
+  	
+  }
 /**--------------------修改fiber----------------------*/
 @RequestMapping("fiber/modifyFiber")
   public void alterFiber(HttpServletRequest request,HttpServletResponse response) throws IOException{
-	    printAllRequestPara(request);
 		Map <String,Object> fiberPara=new LinkedHashMap<String,Object>();
 		boolean status=false;
 		Long frameAId=null;

@@ -1556,9 +1556,14 @@ public  void ResourceDeleteCabinetConditionB (HttpServletRequest request,HttpSer
 		  					int swModOrderB=(swPortB[0]-1)/8+1;
 		  					/**同一个保护-主，保护-从模块**/
 		  					if(modOrderA==modOrderB&&swA.equals((String)matchGroups.get(j).get("switchRtuId"))&&swModOrderA==swModOrderB){
-		  						/**同向的两条光路端口为A1-B1或C1-D1或A2-B2或C2-D2即为端口号为1-2,3-4,5-6,7-8**/
-		  						int smallOrder=(portA[0]<portB[0])?portA[0]:portB[0];
-		  						int bigOrder=(portA[0]>portB[0])?portA[0]:portB[0];
+		  						/**
+		  						 * A-B构成一个双向组， C-D构成一个双向组，即为(A1,A2)-(B1,B2)构成一个保护组，较小的两个端口号为A1(1),B1(2)，相差1
+		  						 * (C1,C2)-(D1,D2)构成一个保护组，较小的两个端口号为C1(3),D1(4)，相差1
+		  						 * **/
+		  						int smallA=(portA[0]<portA[1])?portA[0]:portA[1];
+		  						int smallB=(portB[0]<portB[1])?portB[0]:portB[1];
+		  						int smallOrder=(smallA<smallB)?smallA:smallB;
+		  						int bigOrder=(smallA>smallB)?smallA:smallB;
 		  						/**满足收发连接关系**/
 		  						if(smallOrder%2==1&&(bigOrder==smallOrder+1)){
 		  							Map<String,Object> routePara=new LinkedHashMap<String, Object>();

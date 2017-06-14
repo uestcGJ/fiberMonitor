@@ -66,7 +66,6 @@ public class ShiroDaoRealm extends AuthorizingRealm{
 		/**通过表单获取的用户信息**/
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user=findServiceImpl.findUserByAccount(token.getUsername());
-		
 		if (user!=null) {
 			return new SimpleAuthenticationInfo(user.getAccount(),user.getPassword()," ");
 		} else {

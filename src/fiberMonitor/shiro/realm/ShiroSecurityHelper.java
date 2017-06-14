@@ -83,7 +83,7 @@ public class ShiroSecurityHelper {
     public static void kickOutUser(String username){  
         List<Session> sessions = getSessionByUsername(username); 
         for(Session session:sessions){
-        	if(null != session && !StringUtils.equals(String.valueOf(session.getId()), ShiroSecurityHelper.getSessionId())){ 
+        	if(null != session && !StringUtils.equals(String.valueOf(session.getId()), getSessionId())){ 
         		  sessionDAO.delete(session);
            	      clearAuthenticationInfo(session.getId()); 
                   session.stop();

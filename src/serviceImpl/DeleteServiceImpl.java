@@ -212,7 +212,7 @@ public class DeleteServiceImpl implements DeleteService{
 		for(int i=0;i<jumperFrame.size();i++){
 			deleteJumperFrame(jumperFrame.get(i).getId());
 		}
-		//删光纤
+		//删光缆
 		List<Optical_cables> cables=opticalCableDao.findAllByStationId(id);
 		if(cables.size()>0){
 			for(int i = 0 ;i<cables.size();i++){
@@ -469,6 +469,7 @@ public class DeleteServiceImpl implements DeleteService{
 				if(frame_port != null){
 					frame_port.setConnection_id(null);
 					frame_port.setConnection_type(null);
+					frame_port.setHas_fiber(false);
 					frame_port.setStatus(false);
 					framePortDao.alterEntity(frame_port);
 				}

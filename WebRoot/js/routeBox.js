@@ -638,7 +638,8 @@ function plotRoutes(routes) {
 						   "<span style='font-weight:bold;'> 距下个地标:</span>"+warn.beyond+
 						"</div>"+	   
 						"<div style='margin:0;text-indent:0.5em'>"+
-						   "<a href='javascript:confirmWarn("+warn.id+")'>确认告警</a>"+
+						   "<a  href='javascript:confirmWarn("+warn.id+",false)'>确认告警</a>"+
+						   "<a style='margin-left:50px;color:#4c28eb' href='javascript:confirmWarn("+warn.id+",true)'>确认相关告警</a>"+
 						"</div>"
 					 "</div>";
 			warnMarker.setInfo(info);
@@ -723,7 +724,7 @@ function plotRoutes(routes) {
 	}
 };
 /***确认告警***/
-function confirmWarn(selectId){
+function confirmWarn(selectId,handleRelative){
 	 $.ajax({
        type : "post",
        async : false,  //异步请求 先执行后续操作，再执行sucess
@@ -731,6 +732,7 @@ function confirmWarn(selectId){
        dataType:"json",
        data : {
        		"warnId":selectId,
+       		"handleRelative":handleRelative,
        },
        success:function(json){
          var txt="";

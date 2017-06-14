@@ -1238,19 +1238,39 @@ public void getAlarmGroupById(HttpServletRequest request,HttpServletResponse res
 		@RequestMapping("alarm/handleAlarm/ignore")
 	    public void warnIgnore(HttpServletRequest request,HttpServletResponse response) throws IOException{
 			long warnId= Long.parseLong(request.getParameter("warnId"));
+			Subject currentUser = SecurityUtils.getSubject();//获取当前用户
+		  	String account=currentUser.getPrincipal().toString();//当前用户的账号
+		  	boolean status=true;
 			//更改数据库中的更改告警状态、处理用户和处理时间
 			Alarm alertInfo = findService.findAlarmById(warnId);
-	        alertInfo.setIs_handle(true);
-	        Subject currentUser = SecurityUtils.getSubject();//获取当前用户
-	  	    String Account=currentUser.getPrincipal().toString();//当前用户的账号
-	        alertInfo.setHandle_user(Account);
-	        alertInfo.setHandle_time(NumConv.currentTime(false));
-	        boolean status=alterService.alterAlarm(alertInfo);
+			if(alertInfo!=null){
+				if(request.getParameter("handleRelative")!=null&&Boolean.parseBoolean(request.getParameter("handleRelative"))){
+					Long routeId=alertInfo.getRoute().getId();
+					List<Alarm> alarms=findService.findAlarmByRouteId(routeId);
+					if(alarms!=null&&!alarms.isEmpty()){
+						for(int i=0;i<alarms.size();i++){
+							Alarm alarm=alarms.get(i);
+							if(alarm.getIs_handle()){
+								continue;
+							}
+							alarm.setIs_handle(true);
+							alarm.setHandle_user(account);
+							alarm.setHandle_time(NumConv.currentTime(false));
+							status&=alterService.alterAlarm(alarm);
+						}
+					}
+				}
+				else{
+					 alertInfo.setIs_handle(true);
+				     alertInfo.setHandle_user(account);
+				     alertInfo.setHandle_time(NumConv.currentTime(false));
+				     status=alterService.alterAlarm(alertInfo);
+				}
+			}
 	        Map<String,Object> responseData=new LinkedHashMap<String,Object>();
 	        responseData.put("status", status);
 	        responseData.put("routeId", alertInfo.getRoute().getId());
 	        JSONArray responseJson=JSONArray.fromObject(responseData); 
-	    	//System.out.println(responseJson);
 			PrintWriter out=response.getWriter();
 			out.println(responseJson);
 			out.flush(); 
